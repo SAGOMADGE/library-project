@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Library project</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header"></div>
+
+      <div class="cards-space">
+        <dialog id="my-dialog">
+          <form action="#" method="post">
+            <input
+              id="title"
+              type="text"
+              placeholder="Название книги"
+              required
+            />
+            <input id="author" type="text" placeholder="Автор" required />
+            <input
+              id="pages"
+              type="number"
+              min="0"
+              max="10000"
+              placeholder="Страницы"
+              required
+            />
+            <label>
+              Прочитана:
+              <input id="read" type="checkbox" />
+            </label>
+            <button type="submit">Добавить книгу</button>
+          </form>
+        </dialog>
+
+        <div id="cards-container"></div>
+      </div>
+
+      <div id="empty-container">Книги пока не добавлены</div>
+
+      <div class="button-area">
+        <button id="btn-open-form">Добавить новую книгу</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
