@@ -1,0 +1,22 @@
+# Windows trash
+*.lnk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# System folders
+AppData/
+Documents/
+Downloads/
+Music/
+Videos/
+Pictures/
+OneDrive/
+Saved Games/
+Searches/
+
+# VS Code
+.vscode/
+
+# Node (если будет)
+node_modules/
