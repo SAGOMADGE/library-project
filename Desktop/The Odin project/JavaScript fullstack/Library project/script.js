@@ -12,23 +12,24 @@ const emptyContainer = document.getElementById("empty-container");
 // ARRAY FOR BOOKS
 const myLibrary = [];
 
-// CONSTRUCTOR FOR BOOKS
-function Book(title, author, pages, isRead) {
-  this.id = crypto.randomUUID();
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.isRead = isRead;
+// CLASS FOR BOOKS
+class Book {
+  constructor(title, author, pages, isRead) {
+    this.id = crypto.randomUUID();
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.isRead = isRead;
+  }
+  static addBookToLibrary(book) {
+    myLibrary.push(book);
+  }
+  toggleRead() {
+    this.isRead = !this.isRead;
+  }
 }
-
-Book.prototype.toggleRead = function () {
-  this.isRead = !this.isRead;
-};
 
 // ADD BOOK TO ARRAY
-function addBookToLibrary(book) {
-  myLibrary.push(book);
-}
 
 // RENDER BOOKS
 function render() {
@@ -77,7 +78,7 @@ form.addEventListener("submit", (e) => {
   const isRead = readCheckbox.checked;
 
   const newBook = new Book(title, author, pages, isRead);
-  addBookToLibrary(newBook);
+  Book.addBookToLibrary(newBook);
 
   render();
 
