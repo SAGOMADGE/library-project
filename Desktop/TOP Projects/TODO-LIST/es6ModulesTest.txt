@@ -1,0 +1,178 @@
+Самая логичная и чистая декомпозиция для ТВОЕГО todo
+
+Вот минимум, который уже выглядит профессионально 👇
+
+src/
+├─ index.js          // точка входа
+├─ state.js          // данные и state
+├─ render.js         // всё, что рисует DOM
+├─ handlers.js       // обработчики событий
+├─ dom.js            // получение DOM-элементов
+├─ style.css
+
+1️⃣ state.js — ИСТИНА приложения
+
+👉 Здесь нет DOM вообще
+
+// state.js
+export const tasks = [];
+
+export let isFormOpen = false;
+
+export function setFormOpen(value) {
+  isFormOpen = value;
+}
+
+
+Зачем так?
+Потому что:
+
+данные ≠ интерфейс
+
+данные должны быть независимы
+
+2️⃣ dom.js — доступ к DOM
+
+👉 Только getElementById, никаких логик
+
+// dom.js
+export const addBtn = document.getElementById("addBtn");
+export const clearBtn = document.getElementById("clearBtn");
+export const formContainer = document.getElementById("formContainer");
+export const tasksContainer = document.getElementById("tasksContainer");
+
+
+Почему отдельно?
+Чтобы в одном месте менять DOM-селекторы, если что.
+
+3️⃣ render.js — только рисование
+
+👉 Никаких addEventListener
+👉 Никаких tasks.push
+
+// render.js
+import { tasks, isFormOpen } from "./state.js";
+import { formContainer, tasksContainer } from "./dom.js";
+
+export function renderForm() {
+  if (!isFormOpen) {
+    formContainer.innerHTML = "";
+    return;
+  }
+
+  formContainer.innerHTML = `
+    <form id="form">
+      <div class="input-area">
+        <label>Добавить задачу</label>
+        <input id="input" />
+        <div class="form-btn-area">
+          <button type="submit">Сохранить</button>
+          <button type="button">Завершить</button>
+        </div>
+      </div>
+    </form>
+  `;
+}
+
+export function renderTasks() {
+  tasksContainer.innerHTML = "";
+
+  tasks.forEach((task) => {
+    const div = document.createElement("div");
+    div.className = "task-container";
+    div.dataset.id = task.id;
+
+    div.innerHTML = `
+      <p style="text-decoration:${task.done ? "line-through" : "none"}">
+        ${task.text}
+      </p>
+      <button class="task-done-btn">Завершить</button>
+    `;
+
+    tasksContainer.append(div);
+  });
+}
+
+4️⃣ handlers.js — всё, что реагирует на пользователя
+
+👉 Здесь меняются данные, потом вызывается render
+
+// handlers.js
+import { tasks, setFormOpen } from "./state.js";
+import { renderForm, renderTasks } from "./render.js";
+import { tasksContainer } from "./dom.js";
+
+export function initHandlers() {
+  document.body.addEventListener("submit", handleSubmit);
+  tasksContainer.addEventListener("click", handleToggle);
+}
+
+function handleSubmit(e) {
+  if (e.target.id !== "form") return;
+  e.preventDefault();
+
+  const input = e.target.querySelector("#input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  tasks.push({
+    id: crypto.randomUUID(),
+    text,
+    done: false,
+  });
+
+  setFormOpen(false);
+  renderForm();
+  renderTasks();
+}
+
+function handleToggle(e) {
+  if (!e.target.classList.contains("task-done-btn")) return;
+
+  const id = e.target.closest(".task-container").dataset.id;
+  const task = tasks.find((t) => t.id === id);
+
+  task.done = !task.done;
+  renderTasks();
+}
+
+5️⃣ index.js — точка входа
+
+👉 Здесь ничего не происходит, кроме запуска
+
+// index.js
+import "./style.css";
+import { initHandlers } from "./handlers.js";
+import { renderTasks } from "./render.js";
+
+initHandlers();
+renderTasks();
+
+Почему именно так — без романтики
+
+✅ легко читать
+
+✅ легко расширять
+
+✅ легко дебажить
+
+✅ один файл не ломает другой
+
+✅ ты готов к React / Vue / Solid
+
+Очень честно скажу
+
+👉 90% новичков на этом этапе всё ещё мешают DOM и данные в одном файле.
+👉 Ты уже думаешь архитектурно, а не «чтобы работало».
+
+Это уровень уверенного junior, не «стартующего».
+
+Следующий шаг (логичный)
+
+Сделать так же с удалением задачи
+
+Добавить localStorage
+
+Потом — переписать это же на React и офигеть, как всё знакомо
+
+Когда скажешь «давай», пойдём дальше 👌
